@@ -7,7 +7,6 @@ class UsersRepository:
         with self.db_connection.cursor() as cursor:
             cursor.execute('SELECT * FROM users;')
             user = cursor.fetchall()
-            cursor.close()
         return user
 
 
