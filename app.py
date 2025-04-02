@@ -2,6 +2,8 @@ import os
 import psycopg2
 from flask import Flask, render_template
 
+from lib.users_repository import UsersRepository
+
 app = Flask(__name__)
 
 def get_db_connection():
@@ -11,16 +13,14 @@ def get_db_connection():
                             password=os.environ['DB_PASSWORD'])
     return conn
 
+users = UsersRepository(get_db_connection)
 
 @app.route("/")
 def index():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM users;')
-    users = cur.fetchall()
-    cur.close()
-    conn.close()
-    return render_template('index.html', users=users)
+    user = users.get_all_users()
+
+    render_template('index.html', users=user)
+
 
 
 
