@@ -1,8 +1,9 @@
 import os
 import psycopg2
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 from lib.users_repository import UsersRepository
+import requests 
 
 load_dotenv()
 
@@ -17,11 +18,50 @@ def get_db_connection():
 
 users = UsersRepository(get_db_connection())
 
-@app.route("/")
-def index():
-    user = users.get_all_users()
+USER_IP_URL = "http://ip-api.com/json/"
 
-    return render_template('index.html', users=user)
+
+
+
+
+
+# @app.route("location")
+# def location():
+
+@app.route('/', methods=['GET'])
+def get_location():
+    # Get the user's IP address
+    # user_ip = request.remote_addr
+
+    # Make a request to the ip-api geolocation service
+    response = requests.get(f'http://ip-api.com/json/81.153.29.244')
+    
+    if response.status_code == 200:
+        data = response.json()
+        latitude = data.get('lat')
+        longitude = data.get('lon')
+        
+        if latitude and longitude:
+            return jsonify({
+                'ip': "81.153.29.244",
+                'latitude': latitude,
+                'longitude': longitude
+            })
+        else:
+            return jsonify({"error": "Location data not available."}), 400
+    else:
+        return jsonify({"error": "Could not fetch location data."}), 500
+
+
+
+
+# @app.route("/")
+# def index():
+#     user = users.get_all_users()
+
+#     return render_template('index.html', users=user)
+
+
 
 
 
