@@ -1,13 +1,17 @@
 import os
 import psycopg2
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 from dotenv import load_dotenv
 from lib.users_repository import UsersRepository
 import requests 
+from lib.gps import Gps
+from lib.googleApi import GoogleApi
+
 
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FLASK_KEY")
 
 def get_db_connection():
     conn = psycopg2.connect(host=os.getenv('DB_HOST'),
@@ -29,42 +33,24 @@ USER_IP_URL = "http://ip-api.com/json/"
 # def location():
 
 @app.route('/', methods=['GET'])
-def get_location():
-    # Get the user's IP address
-    # user_ip = request.remote_addr
+def hello():
+    gps = Gps()
+    gps.get_location()
+    session['lat'] = gps.latitude
+    session['lon'] = gps.longitude
+    return "Location saved in session"
 
-    # Make a request to the ip-api geolocation service
-    response = requests.get(f'http://ip-api.com/json/81.153.29.244')
-    
-    if response.status_code == 200:
-        data = response.json()
-        latitude = data.get('lat')
-        longitude = data.get('lon')
-        
-        if latitude and longitude:
-            return jsonify({
-                'ip': "81.153.29.244",
-                'latitude': latitude,
-                'longitude': longitude
-            })
-        else:
-            return jsonify({"error": "Location data not available."}), 400
-    else:
-        return jsonify({"error": "Could not fetch location data."}), 500
+@app.route("/test", methods=['GET'])
+def google():
 
-
-
-
-# @app.route("/")
-# def index():
-#     user = users.get_all_users()
-
-#     return render_template('index.html', users=user)
-
-
-
-
-
+    lat = session.get('lat')
+    print(lat)
+    lon = session.get('lon')
+    print(lon)
+    startend = GoogleApi(lat, lon, "tw105ls")
+    a = startend.get_start_end_point()
+    print(a)
+    return render_template('results.html', startend=a)
 
 
 
