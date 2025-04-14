@@ -1,7 +1,9 @@
 <h1>TEST</h1>
-      <br>
-      <form class="test" action="/" method="POST">
-        <div class="mb-3">
-          <label for="name" class="form-label" style="font-size:1.25rem;">destination</label>
-          <input type="text" class="form-control-sm" id="name" name="name" aria-describedby="nameHelp" value="{{ name or '' }}" required>
-        </div>
+<br>
+<form class="test" action="/test" method="POST">
+  <div class="mb-3">
+    <label for="location" class="form-label" style="font-size:1.25rem;">Destination</label>
+    <input type="text" class="form-control-sm" id="location" name="location" aria-describedby="locationHelp" value="{{ location or '' }}" required>
+  </div>
+  <button type="submit">Submit</button>
+</form>

@@ -27,7 +27,8 @@ class GoogleApi(Gps):
             a = response.json()
             return {
                 "start_point": a["routes"][0]["legs"][0]["start_address"],
-                "end_point": a["routes"][0]["legs"][0]["end_address"]
+                "end_point": a["routes"][0]["legs"][0]["end_address"],
+                "time_taken": a["routes"][0]["legs"][0]["duration"]["text"]
             }
         else:
             return {"error": "Could not fetch directions"}

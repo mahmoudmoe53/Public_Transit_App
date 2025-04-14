@@ -40,17 +40,27 @@ def hello():
     session['lon'] = gps.longitude
     return "Location saved in session"
 
-@app.route("/test", methods=['GET'])
+@app.route("/test", methods=['GET', 'POST'])
 def google():
+
+    location = None
+    if request.method == "POST":
+        location = request.form.get("location")
+    if not location:
+        return render_template('results.html')
 
     lat = session.get('lat')
     print(lat)
     lon = session.get('lon')
-    print(lon)
-    startend = GoogleApi(lat, lon, "tw105ls")
+    print(location)
+
+
+    startend = GoogleApi(lat, lon, location)
     a = startend.get_start_end_point()
     print(a)
     return render_template('results.html', startend=a)
+
+
 
 
 
