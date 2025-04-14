@@ -5,5 +5,7 @@
     <label for="location" class="form-label" style="font-size:1.25rem;">Destination</label>
     <input type="text" class="form-control-sm" id="location" name="location" aria-describedby="locationHelp" value="{{ location or '' }}" required>
   </div>
+  <div class="mb-3">{{message}}</div>
+
   <button type="submit">Submit</button>
 </form>
