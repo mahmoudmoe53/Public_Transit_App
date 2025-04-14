@@ -58,7 +58,7 @@ def google():
     startend = GoogleApi(lat, lon, location)
     a = startend.get_start_end_point()
     print(a)
-    return render_template('results.html', startend=a)
+    return render_template('results.html', startend=a, message=a)
 
 
 
