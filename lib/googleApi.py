@@ -24,6 +24,10 @@ class GoogleApi(Gps):
         )
 
         if response.status_code == 200:
-            return response.json()
+            a = response.json()
+            return {
+                "start_point": a["routes"][0]["legs"][0]["start_address"],
+                "end_point": a["routes"][0]["legs"][0]["end_address"]
+            }
         else:
             return {"error": "Could not fetch directions"}
