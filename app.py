@@ -52,13 +52,16 @@ def google():
     lat = session.get('lat')
     print(lat)
     lon = session.get('lon')
-    print(location)
+    print(lon)
 
 
     startend = GoogleApi(lat, lon, location)
     a = startend.get_start_end_point()
-    print(a)
+    # print(a)
+    print(startend.stop_location())
     return render_template('results.html', startend=a, message=a)
+
+ 
 
 
 
