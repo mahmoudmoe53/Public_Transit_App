@@ -57,18 +57,19 @@ def google():
 
 
     startend = GoogleApi(lat, lon, location)
-    a = startend.get_start_end_point()
-    # print(a)
+    a = startend.get_start_end_point() 
     b = startend.stop_location()
     bus_stop_name = startend.remove_after_bracket(b)
+    print(bus_stop_name)
     bus_stop_letter = startend.stop_letter(b)
+    print(bus_stop_letter)
 
     testing_arrivals = TflApi()
     aa = testing_arrivals.get_parent_number(bus_stop_name)
-
-    
-    
-
+    bb = testing_arrivals.get_child_number(aa, bus_stop_letter)  # Add bus_stop_letter as the second argument
+    print(bb)
+    arrivals = testing_arrivals.get_live_arrivals(bb)
+    print(arrivals)
     return render_template('results.html', startend=a, message=a)
 
  
