@@ -4,8 +4,9 @@ from flask import Flask, render_template, request, jsonify, session
 from dotenv import load_dotenv
 from lib.users_repository import UsersRepository
 import requests 
-from lib.gps import Gps
+from lib.gpsApi import Gps
 from lib.googleApi import GoogleApi
+from lib.tflApi import TflApi
 
 
 load_dotenv()
@@ -58,7 +59,16 @@ def google():
     startend = GoogleApi(lat, lon, location)
     a = startend.get_start_end_point()
     # print(a)
-    print(startend.stop_location())
+    b = startend.stop_location()
+    bus_stop_name = startend.remove_after_bracket(b)
+    bus_stop_letter = startend.stop_letter(b)
+
+    testing_arrivals = TflApi()
+    aa = testing_arrivals.get_parent_number(bus_stop_name)
+
+    
+    
+
     return render_template('results.html', startend=a, message=a)
 
  

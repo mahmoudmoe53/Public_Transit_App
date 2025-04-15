@@ -7,7 +7,7 @@ class Gps:
        self.latitude = 0  
        self.longitude = 0
     def get_location(self):
-        response = requests.get(f'http://ip-api.com/json/81.153.29.244')
+        response = requests.get('http://ip-api.com/json/81.153.29.244')
             
         if response.status_code == 200:
             data = response.json()
