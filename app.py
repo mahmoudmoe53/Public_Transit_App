@@ -7,6 +7,7 @@ import requests
 from lib.gpsApi import Gps
 from lib.googleApi import GoogleApi
 from lib.tflApi import TflApi
+from lib.tomtomApi import TomtomApi 
 
 
 load_dotenv()
@@ -70,6 +71,13 @@ def google():
     print(bb)
     arrivals = testing_arrivals.get_live_arrivals(bb)
     print(arrivals)
+
+    testing_update = TomtomApi(lat, lon)
+    print(testing_update.latitude)
+    cc = testing_update.get_coordinates()
+    print(cc)
+    pp = testing_update.get_accident_update(cc)
+    print(pp)
     return render_template('results.html', startend=a, message=a)
 
  

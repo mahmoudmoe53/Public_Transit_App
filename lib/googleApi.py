@@ -5,7 +5,7 @@ from lib.gpsApi import Gps
 from dotenv import load_dotenv
 
 load_dotenv()
-secret_key = os.environ.get("GOOGLE_API_KEY")
+secret_key = os.environ.get("API_KEY")
 
 class GoogleApi(Gps):
     def __init__(self, latitude, longitude, destination):
