@@ -3,10 +3,13 @@ from flask import jsonify
 
 class Gps:
     def __init__(self):
-       self.a = 0
        self.latitude = 0  
        self.longitude = 0
+
     def get_location(self):
+
+        '''methods that gets the current location using clients ip.\n (Currently using dummy data)'''
+
         response = requests.get('http://ip-api.com/json/81.153.29.244')
             
         if response.status_code == 200:

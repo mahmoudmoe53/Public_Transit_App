@@ -13,10 +13,11 @@ class GoogleApi(Gps):
         self.latitude = latitude
         self.longitude = longitude
         self.destination = destination
-        # self.stop_name = 17
-        # self.stop_letter = 0
 
     def get_start_end_point(self):
+
+        '''Returns the coordinates of the client'''
+
         origin = f"{self.latitude},{self.longitude}"
         destination = self.destination
 
@@ -37,6 +38,9 @@ class GoogleApi(Gps):
 
 
     def stop_location(self):
+
+        '''returns the stop location coordinates'''
+
         origin = f"{self.latitude},{self.longitude}"
         destination = self.destination
 

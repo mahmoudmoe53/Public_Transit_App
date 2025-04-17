@@ -14,6 +14,9 @@ class Weather:
 
 
     def location_weather(self):
+        
+        '''This is a methods that takes the arrival destination and returns the current temperature'''
+        
         response = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={self.lat}&lon={self.lon}&exclude=hourly,daily&appid={secret_key}")
         if response.status_code == 200:
             data = response.json()

@@ -3,10 +3,13 @@ import requests
 
 class TflApi:
     def __init__(self):
-        self.asdasd = 0  
+        pass  
 
 
     def get_parent_number(self, stop_name):
+
+        '''gets the initial value required to get the naptanid'''
+
         response = requests.get(f"https://api.tfl.gov.uk/StopPoint/Search/{stop_name}")
         if response.status_code == 200:
             data = response.json()
@@ -14,6 +17,9 @@ class TflApi:
         
 
     def get_child_number(self, parent_number, stop_letter):
+
+        '''returns the naptanid'''
+
         if "Stop " in stop_letter:
             stop_letter = stop_letter.replace("Stop ", "")
         
@@ -30,6 +36,9 @@ class TflApi:
             return None
 
     def get_live_arrivals(self, naptan_id):
+
+        '''returns a timetable of upcoing buses'''
+
         response = requests.get(f"https://api.tfl.gov.uk/StopPoint/{naptan_id}/Arrivals")
         if response.status_code == 200:
             data = response.json()
