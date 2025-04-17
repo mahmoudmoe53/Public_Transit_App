@@ -33,9 +33,8 @@ class TflApi:
         response = requests.get(f"https://api.tfl.gov.uk/StopPoint/{naptan_id}/Arrivals")
         if response.status_code == 200:
             data = response.json()
-            sorted_arrivals = sorted(data, key=lambda x: x.get('expectedArrival', ''))
-
-            return sorted_arrivals
+            expected_arrivals = [item.get("expectedArrival") for item in data]
+            return expected_arrivals
         else:
             print(f"Failed to fetch arrivals data: {response.status_code}")
             return None
