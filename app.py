@@ -35,16 +35,14 @@ USER_IP_URL = "http://ip-api.com/json/"
 # @app.route("location")
 # def location():
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET','POST'])
 def hello():
     gps = Gps()
     gps.get_location()
     session['lat'] = gps.latitude
     session['lon'] = gps.longitude
-    return "Location saved in session"
+    
 
-@app.route("/test", methods=['GET', 'POST'])
-def google():
 
     location = None
     if request.method == "POST":
@@ -85,6 +83,12 @@ def google():
     temps = weather.location_weather()
 
     print(temps)
+    
+    return f"Temperature today is: {temps}\nThe bus timetable can be found below:\n{arrivals}"
+    
+
+# @app.route("/test", methods=['GET', 'POST'])
+
 
 
 
