@@ -51,25 +51,19 @@ def hello():
         return render_template('results.html')
 
     lat = session.get('lat')
-    print(lat)
     lon = session.get('lon')
-    print(lon)
 
 
     startend = GoogleApi(lat, lon, location)
-    a = startend.get_start_end_point() 
-    b = startend.stop_location()
-    bus_stop_name = startend.remove_after_bracket(b)
-    print(bus_stop_name)
-    bus_stop_letter = startend.stop_letter(b)
-    print(bus_stop_letter)
+    startend.get_start_end_point() 
+    destination = startend.stop_location()
+    bus_stop_name = startend.remove_after_bracket(destination)
+    bus_stop_letter = startend.stop_letter(destination)
 
     testing_arrivals = TflApi()
-    aa = testing_arrivals.get_parent_number(bus_stop_name)
-    bb = testing_arrivals.get_child_number(aa, bus_stop_letter)  # Add bus_stop_letter as the second argument
-    print(bb)
-    arrivals = testing_arrivals.get_live_arrivals(bb)
-    print(arrivals)
+    parent_number = testing_arrivals.get_parent_number(bus_stop_name)
+    child_number = testing_arrivals.get_child_number(parent_number, bus_stop_letter)  # Add bus_stop_letter as the second argument
+    arrivals = testing_arrivals.get_live_arrivals(child_number)
 
 
     testing_update = TomtomApi(lat, lon)
@@ -82,7 +76,6 @@ def hello():
     weather = Weather(lat=lat, lon=lon)
     temps = weather.location_weather()
 
-    print(temps)
     
     return f"Temperature today is: {temps}\nThe bus timetable can be found below:\n{arrivals}"
     
