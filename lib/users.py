@@ -24,5 +24,6 @@ class Users:
         self.db_connection.commit()
         cur.close()
         
+    
 
 
