@@ -49,7 +49,8 @@ def hello():
     if request.method == "POST":
         location = request.form.get("location")
     if not location:
-        return render_template('results.html')
+        return render_template('index.html')
+
 
     lat = session.get('lat')
     lon = session.get('lon')
@@ -78,11 +79,16 @@ def hello():
     temps = weather.location_weather()
 
     
-    return f"Temperature today is: {temps}\nThe bus timetable can be found below:\n{arrivals}"
+    return render_template("index.html", temps=temps, arrivals=arrivals)
+
     
 
-@app.route("/signup", methods=['POST'])
+@app.route("/signup", methods=['GET', 'POST'])
 def sign_up():
+    if request.method == 'GET':
+        return render_template("signup.html")
+
+    
     name = request.form.get('name')
     email = request.form.get('email')
     password = request.form.get('password')
@@ -92,6 +98,7 @@ def sign_up():
 
     users.create(name, email, password)
     return jsonify({"message": "User created successfully"}), 201
+
         
 
 
