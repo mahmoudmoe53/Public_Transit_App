@@ -2,7 +2,7 @@ import os
 import psycopg2
 from flask import Flask, render_template, request, jsonify, session
 from dotenv import load_dotenv
-from lib.users_repository import UsersRepository
+from lib.users import Users
 import requests 
 from lib.gpsApi import Gps
 from lib.googleApi import GoogleApi
@@ -23,7 +23,8 @@ def get_db_connection():
                             password=os.getenv('DB_PASSWORD'))
     return conn
 
-users = UsersRepository(get_db_connection())
+users = Users(get_db_connection())
+
 
 USER_IP_URL = "http://ip-api.com/json/"
 
@@ -80,7 +81,20 @@ def hello():
     return f"Temperature today is: {temps}\nThe bus timetable can be found below:\n{arrivals}"
     
 
-# @app.route("/test", methods=['GET', 'POST'])
+@app.route("/signup", methods=['POST'])
+def sign_up():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if not name or not email or not password:
+        return jsonify({"error": "All fields (name, email, password) are required"}), 400
+
+    users.create(name, email, password)
+    return jsonify({"message": "User created successfully"}), 201
+        
+
+
 
 
 
