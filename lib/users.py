@@ -1,47 +1,60 @@
+import os
 import psycopg2
 from dotenv import load_dotenv
-import os
-import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 load_dotenv()
 
-conn = psycopg2.connect(host=os.getenv('DB_HOST'),
-                            database=os.getenv('DB_NAME'),
-                            user=os.getenv('DB_USERNAME'),
-                            password=os.getenv('DB_PASSWORD'))
 
-cur = conn.cursor()
-
+def get_db_connection():
+    conn = psycopg2.connect(host=os.getenv('DB_HOST'),
+                             database=os.getenv('DB_NAME'),
+                             user=os.getenv('DB_USERNAME'),
+                             password=os.getenv('DB_PASSWORD'))
+    return conn
 
 
 class Users:
-    def __init__(self, db_connection):
-        self.db_connection = db_connection
+    def __init__(self, get_db_connection):
+        self.get_db_connection = get_db_connection
 
     def create(self, name, email, password):
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        """Create a new user in the database."""
+        hashed_password = generate_password_hash(password)  
+        connection = self.get_db_connection()
+        cursor = connection.cursor()
 
-        cur = self.db_connection.cursor()
-        cur.execute(
-            'INSERT INTO users (name, email, password) VALUES (%s, %s, %s)',
-            (name, email, hashed_password)
-        )
-        self.db_connection.commit()
-        cur.close()
-        
+        try:
+            cursor.execute("""
+                INSERT INTO users (name, email, password)
+                VALUES (%s, %s, %s)
+            """, (name, email, hashed_password))
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            print(f"Error creating user: {e}")
+        finally:
+            cursor.close()
+            connection.close()
 
-    def authenticate(self, email, password):
-        cur = self.db_connection.cursor()
-        cur.execute('SELECT password FROM users WHERE email = %s', (email,))
-        row = cur.fetchone()
-        cur.close()
+    def login(self, email, password):
+        """Authenticate a user by comparing the provided password with the hashed password stored in the database."""
+        connection = self.get_db_connection()
+        cursor = connection.cursor()
 
-        if row is None:
-            return False  
+        try:
+            cursor.execute("SELECT id, name, password FROM users WHERE email = %s", (email,))
+            user = cursor.fetchone()
 
-        stored_hashed_password = row[0].encode('utf-8')  
-
-        return bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password)
-    
-
-
+            
+            if user and check_password_hash(user[2], password):  
+                return user  
+            else:
+                return None
+        except Exception as e:
+            print(f"Error logging in user: {e}")
+            return None
+        finally:
+            cursor.close()
+            connection.close()
