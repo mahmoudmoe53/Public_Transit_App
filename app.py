@@ -64,7 +64,7 @@ def hello():
 
     testing_arrivals = TflApi()
     parent_number = testing_arrivals.get_parent_number(bus_stop_name)
-    child_number = testing_arrivals.get_child_number(parent_number, bus_stop_letter)  # Add bus_stop_letter as the second argument
+    child_number = testing_arrivals.get_child_number(parent_number, bus_stop_letter)  
     arrivals = testing_arrivals.get_live_arrivals(child_number)
 
 
