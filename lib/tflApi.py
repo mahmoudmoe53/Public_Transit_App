@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 
 class TflApi:
@@ -35,14 +36,25 @@ class TflApi:
             print(f"Failed to fetch data: {response.status_code}")
             return None
 
+    from datetime import datetime
+
     def get_live_arrivals(self, naptan_id):
-
-        '''returns a timetable of upcoing buses'''
-
+        '''Returns a list of upcoming bus arrival times (formatted as HH:MM)'''
+        
         response = requests.get(f"https://api.tfl.gov.uk/StopPoint/{naptan_id}/Arrivals")
         if response.status_code == 200:
             data = response.json()
-            expected_arrivals = [item.get("expectedArrival") for item in data]
+            
+            expected_arrivals = []
+            for item in data:
+                raw_time = item.get("expectedArrival")
+                if raw_time:
+                    dt = datetime.fromisoformat(raw_time.replace("Z", "+00:00"))
+                    formatted_time = dt.strftime("%H:%M")
+                    expected_arrivals.append(formatted_time)
+                    
+            
+            expected_arrivals.sort()
             return expected_arrivals
         else:
             print(f"Failed to fetch arrivals data: {response.status_code}")
