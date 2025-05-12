@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=initMap" async defer></script>
 
 <h1 class="mb-4">Transport Info Checker</h1>
 
@@ -14,15 +15,9 @@
             placeholder="e.g., Oxford Circus" 
             required>
     </div>
-    <button type="submit" class="btn btn-primary">Check Info</button>
+    <button type="submit" class="btn btn-primary">Get Info</button>
 </form>
 
-{% if temps %}
-    <div class="mt-5">
-        <h4>🌤️ Current Temperature:</h4>
-        <p>{{ temps }}</p>
-    </div>
-{% endif %}
 
 {% if arrivals %}
     <div class="mt-4">
@@ -35,6 +30,56 @@
     </div>
 {% endif %}
 
+
+{% if temps %}
+    <div class="mt-5">
+        <h4>🌤️ Current Temperature:</h4>
+        <p>{{ temps }}</p>
+    </div>
+{% endif %}
+
+
+{% if request.form.location %}
+    <hr class="my-5">
+    <h4 class="mb-3">📍 Route from your location to "{{ request.form.location }}"</h4>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+
+    <script>
+        window.initMap = function() {
+            
+            const startLat = 51.445;
+            const startLon = -0.4103;
+            const origin = new google.maps.LatLng(startLat, startLon);
+
+            
+            const destination = "{{ request.form.location }}";
+
+            let map, directionsService, directionsRenderer;
+
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: origin,
+                zoom: 12,
+            });
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            const request = {
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING, 
+            };
+
+            directionsService.route(request, function(result, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionsRenderer.setDirections(result);
+                } else {
+                    alert("Could not display directions due to: " + status);
+                }
+            });
+        }
+    </script>
+{% endif %}
+
 {% endblock %}
-
-
