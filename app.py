@@ -49,6 +49,7 @@ def hello():
 
     lat = session.get('lat')
     lon = session.get('lon')
+    
 
     startend = GoogleApi(lat, lon, location)
     startend.get_start_end_point()
@@ -67,8 +68,9 @@ def hello():
 
     weather = Weather(lat=lat, lon=lon)
     temps = weather.location_weather()
+    api_key = os.environ.get("API_KEY")
+    return render_template("index.html", temps=temps, arrivals=arrivals, lat=lat, lon=lon, api_key=api_key)
 
-    return render_template("index.html", temps=temps, arrivals=arrivals)
 
 @app.route("/signup", methods=['GET', 'POST'])
 def sign_up():
