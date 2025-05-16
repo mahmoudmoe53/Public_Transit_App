@@ -2,7 +2,7 @@
 {% block content %}
 <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=initMap" async defer></script>
 
-<h1 class="mb-4">Transport Info Checker</h1>
+<h1 class="mb-4">Bus Times & Routes</h1>
 
 <form method="POST" action="/">
     <div class="mb-3">
@@ -21,7 +21,7 @@
 
 {% if arrivals %}
     <div class="mt-4">
-        <h4>🚌 Live Bus Arrivals:</h4>
+        <h4>🚌 Live Bus Arrivals 🚌:</h4>
         <ul class="list-group">
             {% for arrival in arrivals %}
                 <li class="list-group-item">{{ arrival }}</li>
@@ -33,7 +33,7 @@
 
 {% if temps %}
     <div class="mt-5">
-        <h4>🌤️ Current Temperature:</h4>
+        <h4>🌤️ Current Temperature 🌤️:</h4>
         <p>{{ temps }}</p>
     </div>
 {% endif %}
@@ -41,7 +41,7 @@
 
 {% if request.form.location %}
     <hr class="my-5">
-    <h4 class="mb-3">📍 Route from your location to "{{ request.form.location }}"</h4>
+    <h4 class="mb-3">📍 Route from your location to "{{ request.form.location }}" 📍</h4>
     <div id="map" style="height: 500px; width: 100%;"></div>
 
     <script>
