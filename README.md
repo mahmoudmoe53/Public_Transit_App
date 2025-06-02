@@ -4,11 +4,11 @@
 [![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A web application for tracking London public transit with real-time bus arrivals, weather information, and route planning.
+A web application for tracking London public transit with real time bus arrivals, weather information, and route planning.
 
 ## Features
 
-- 🚌 Real-time bus arrivals (TfL API)
+- 🚌 Real time bus arrivals (TfL API)
 - 🌤️ Weather information
 - 🗺️ Interactive route planning
 - 📍 Location services
